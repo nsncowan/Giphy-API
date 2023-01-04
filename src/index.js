@@ -1,6 +1,10 @@
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './css/styles.css';
+
 function getGiphy (userSearch) {
   let request = new XMLHttpRequest();
-  const url = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY}&q={userSearch}&limit=5&offset=0&rating=pg-13&lang=en`;
+  const url = `https://api.giphy.com/v1/gifs/search?api_key=${process.env.API_KEY}&q=${userSearch}&limit=5&offset=0&rating=pg-13&lang=en`;
 
   request.addEventListener("loadend", function() {
     const apiResponse = JSON.parse(this.responseText);
@@ -8,21 +12,29 @@ function getGiphy (userSearch) {
         printGiphy(apiResponse);
     }
   })
+  request.open("GET", url, true);
+  request.send();
 }
+
 function printGiphy(apiResponse) {
   let results = document.querySelector('#displayGifs');
   apiResponse.data.forEach(element => {
-    results.append(element.embed_url);
+    let newGif = document.createElement("img");
+    newGif.setAttribute('src', element.images.original.url); //this works!!!
+    results.append(newGif);
+
+    //results.append(element.embed_url);
   });
 }
 
-function handleForm(e){
-    e.preventDefault();
-    const userSearch = document.querySelector("#searchTerm").value;
-    document.querySelector('#searchTerm').value = null;
-    getGiphy(userSearch);
+function handleForm(event){
+  event.preventDefault();
+  const userSearch = document.querySelector("#searchTerm").value;
+  document.querySelector('#searchTerm').value = null;
+  getGiphy(userSearch);
 }
 
 window.addEventListener('load', function() {
-    this.document.querySelector('form').addEventListener('submit', handleForm);
-})
+  document.querySelector('form').addEventListener('submit', handleForm);
+    
+});
