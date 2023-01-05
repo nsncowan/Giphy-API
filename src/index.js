@@ -20,10 +20,9 @@ function printGiphy(apiResponse) {
   let results = document.querySelector('#displayGifs');
   apiResponse.data.forEach(element => {
     let newGif = document.createElement("img");
-    newGif.setAttribute('src', element.images.original.url); //this works!!!
+    newGif.setAttribute('src', element.images.fixed_height.url);
     results.append(newGif);
 
-    //results.append(element.embed_url);
   });
 }
 
@@ -31,6 +30,7 @@ function handleForm(event){
   event.preventDefault();
   const userSearch = document.querySelector("#searchTerm").value;
   document.querySelector('#searchTerm').value = null;
+  document.getElementById('displayGifs').innerText= null;
   getGiphy(userSearch);
 }
 
